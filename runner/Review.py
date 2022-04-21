@@ -19,7 +19,7 @@ def word2vec_word_embed(num_words, latent_dim, path, word_id_dict):
             arr = line.split("\t")
             row_id = word_id_dict.get(arr[0])
             vect = arr[1].strip().split(" ")
-            for i in xrange(len(vect)):
+            for i in range(len(vect)):
                 word2vect_embed_mtrx[row_id, i] = float(vect[i])
             line = f.readline()
 
@@ -38,7 +38,7 @@ def get_train_instance(train):
 def get_train_instance_batch_change(count, batch_size, user_input, item_input, ratings, user_reviews, item_reviews):
     users_batch, items_batch, user_input_batch, item_input_batch, labels_batch = [], [], [], [], []
 
-    for idx in xrange(batch_size):
+    for idx in range(batch_size):
         index = (count*batch_size + idx) % len(user_input)
         users_batch.append(user_input[index])
         items_batch.append(item_input[index])
@@ -171,11 +171,11 @@ def train_model():
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
 
-        for e in xrange(epochs):
+        for e in range(epochs):
             t = time()
             loss_total = 0.0
             count = 0.0
-            for i in xrange(int(math.ceil(len(user_input) / float(batch_size)))):
+            for i in range(int(math.ceil(len(user_input) / float(batch_size)))):
                 user_batch, item_batch, user_input_batch, item_input_batch, rates_batch = get_train_instance_batch_change(i, batch_size,user_input,
                                                                                                   item_input, rateings,
                                                                                                   user_reviews,item_reviews)
@@ -186,24 +186,24 @@ def train_model():
                 count += 1.0
             t1 = time()
             val_mses, val_maes = [], []
-            for i in xrange(len(user_input_val)):
+            for i in range(len(user_input_val)):
                 eval_model(users, items, users_inputs, items_inputs, dropout_rate, predict_rating,  sess, user_vals[i], item_vals[i], user_input_val[i], item_input_val[i], rating_input_val[i], val_mses, val_maes)
             val_mse = np.array(val_mses).mean()
             t2 = time()
             mses, maes = [], []
-            for i in xrange(len(user_input_test)):
+            for i in range(len(user_input_test)):
                 eval_model(users, items, users_inputs, items_inputs, dropout_rate, predict_rating,  sess, user_tests[i], item_tests[i], user_input_test[i], item_input_test[i], rating_input_test[i], mses, maes)
             mse = np.array(mses).mean()
             mae = np.array(maes).mean()
             t3 = time()
-            print "epoch%d train time: %.3fs  test time: %.3f  loss = %.3f val_mse = %.3f mse = %.3f mae = %.3f"%(e, (t1 - t), (t3 - t2), loss_total/count, val_mse, mse, mae)
+            print("epoch%d train time: %.3fs  test time: %.3f  loss = %.3f val_mse = %.3f mse = %.3f mae = %.3f"%(e, (t1 - t), (t3 - t2), loss_total/count, val_mse, mse, mae))
 
 
 def eval_model(users, items, users_inputs, items_inputs, dropout_rate, predict_rating, sess, user_tests, item_tests, user_input_tests, item_input_tests, rate_tests, rmses, maes):
 
     predicts = sess.run(predict_rating, feed_dict={users : user_tests, items: item_tests, users_inputs: user_input_tests, items_inputs: item_input_tests, dropout_rate: 1.0})
     row, col = predicts.shape
-    for r in xrange(row):
+    for r in range(row):
         rmses.append(pow((predicts[r, 0] - rate_tests[r][0]), 2))
         maes.append(abs(predicts[r, 0] - rate_tests[r][0]))
     return rmses, maes
@@ -230,8 +230,8 @@ if __name__ == "__main__":
     secTime = time()
 
     num_users, num_items = train.shape
-    print "load data: %.3fs" % (secTime - firTime)
-    print num_users, num_items
+    print("load data: %.3fs" % (secTime - firTime))
+    print(num_users, num_items)
 
     #load word embeddings
     word_embedding_mtrx = ini_word_embed(len(word_dict), word_latent_dim)
@@ -239,7 +239,7 @@ if __name__ == "__main__":
     #                                           "Directory of pretrained WordEmbedding.out",
     #                                           word_dict)
 
-    print "shape", word_embedding_mtrx.shape
+    print("shape", word_embedding_mtrx.shape)
 
     # get train instances
     user_input, item_input, rateings = get_train_instance(train)

@@ -21,7 +21,7 @@ def get_train_instance(train):
 def get_train_instance_batch_change(count, batch_size, user_input, item_input, ratings, user_reviews, item_reviews):
     users_batch, items_batch, user_input_batch, item_input_batch, labels_batch = [], [], [], [], []
 
-    for idx in xrange(batch_size):
+    for idx in range(batch_size):
         index = (count*batch_size + idx) % len(user_input)
         users_batch.append(user_input[index])
         items_batch.append(item_input[index])
@@ -67,11 +67,11 @@ def train_model():
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
 
-        for e in xrange(epochs):
+        for e in range(epochs):
             t = time()
             loss_total = 0.0
             count = 0.0
-            for i in xrange(int(math.ceil(len(user_input) / float(batch_size)))):
+            for i in range(int(math.ceil(len(user_input) / float(batch_size)))):
                 user_batch, item_batch, user_input_batch, item_input_batch, rates_batch = get_train_instance_batch_change(i, batch_size,user_input,
                                                                                                   item_input, rateings,
                                                                                                   user_reviews,item_reviews)
@@ -82,19 +82,19 @@ def train_model():
                 count += 1.0
             t1 = time()
             mses, maes = [], []
-            for i in xrange(len(user_input_test)):
+            for i in range(len(user_input_test)):
                 mses, maes = eval_model(users, items, predict_rating, user_tests[i], item_tests[i], rating_input_test[i], sess, mses, maes)
             mse = np.array(mses).mean()
             mae = np.array(maes).mean()
             t2 = time()
-            print "epoch%d train time: %.3fs test time: %.3f  loss = %.3f  mse = %.3f  mae = %.3f"%(e, (t1 - t), (t2 - t1), loss_total/count, mse, mae)
+            print("epoch%d train time: %.3fs test time: %.3f  loss = %.3f  mse = %.3f  mae = %.3f"%(e, (t1 - t), (t2 - t1), loss_total/count, mse, mae))
 
 
 def eval_model(users, items, predict_rating, user_test, item_test, rate_tests, sess, rmses, maes):
 
     predicts = sess.run(predict_rating, feed_dict={users: user_test, items: item_test})
     row, col = predicts.shape
-    for r in xrange(row):
+    for r in range(row):
         rmses.append(pow((predicts[r, 0] - rate_tests[r][0]), 2))
         maes.append(abs(predicts[r, 0] - rate_tests[r][0]))
     return rmses, maes
@@ -119,8 +119,8 @@ if __name__ == "__main__":
     secTime = time()
 
     num_users, num_items = train.shape
-    print "load data: %.3fs" % (secTime - firTime)
-    print num_users, num_items
+    print("load data: %.3fs" % (secTime - firTime))
+    print(num_users, num_items)
 
 
     # get train instances

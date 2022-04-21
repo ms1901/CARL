@@ -6,10 +6,10 @@ class Dataset(object):
 
     def __init__(self, max_length, path, word_id_path):
         self.word_id_dict = self.load_word_dict(path + word_id_path)
-        print "wordId_dict finished"
+        print("wordId_dict finished")
         self.userReview_dict = self.load_reviews(max_length, len(self.word_id_dict), path + "UserReviews.out")
         self.itemReview_dict = self.load_reviews(max_length, len(self.word_id_dict), path + "ItemReviews.out")
-        print "load reviews finished"
+        print("load reviews finished")
         self.num_users, self.num_items = len(self.userReview_dict), len(self.itemReview_dict)
         self.trainMtrx = self.load_ratingFile_as_mtrx(path + "TrainInteraction.out")
         self.valRatings = self.load_ratingFile_as_list(path + "ValInteraction.out")
@@ -38,7 +38,7 @@ class Dataset(object):
                 entity = int(arr[0])
                 word_list = arr[1].split(" ")
 
-                for i in xrange(len(word_list)):
+                for i in range(len(word_list)):
                     if (word_list[i] == "" or word_list[i] == None or (not self.word_id_dict.has_key(word_list[i]))):
                         continue
                     review.append(self.word_id_dict.get(word_list[i]))

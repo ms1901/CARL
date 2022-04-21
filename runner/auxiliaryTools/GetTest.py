@@ -2,9 +2,9 @@ import math
 
 def get_test_list(batch_size, test_rating, user_reviews, item_reviews):
     user_test_batchs, item_test_batchs, user_input_test_batchs, item_input_test_batchs, rating_input_test_batchs = [], [], [], [], []
-    for count in xrange(int(math.ceil(len(test_rating) / float(batch_size)))):
+    for count in range(int(math.ceil(len(test_rating) / float(batch_size)))):
         user_test, item_test, user_input_test, item_input_test, rating_input_test = [], [], [], [], []
-        for idx in xrange(batch_size):
+        for idx in range(batch_size):
             index = (count * batch_size + idx)
             if (index >= len(test_rating)):
                 break
